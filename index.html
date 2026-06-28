@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UGC World — DM Setter Funnel</title>
+<style>
+:root{--bg:#0E0E0C;--surface:#1A1815;--border:#2A2620;--accent:#E8C88C;--terra:#C97B4A;
+--text:#F5E6CC;--muted:#8A8478;--green:#6FA86F;--amber:#D4A24A;--red:#B85C5C;
+--font:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+*{box-sizing:border-box;}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+.pagehead{display:grid;grid-template-columns:1fr auto;align-items:start;padding:38px 52px 26px;border-bottom:1px solid var(--border);gap:24px;}
+.brand{font-size:24px;letter-spacing:0.3em;color:var(--accent);font-weight:500;margin:0 0 12px;}
+.subtitle{font-size:13px;color:var(--text);margin:0 0 4px;}
+.caption{font-size:12px;color:var(--muted);margin:0;max-width:760px;}
+.headdate{font-size:12px;color:var(--muted);text-align:right;letter-spacing:0.04em;}
+.frame{max-width:1480px;margin:0 auto;padding:18px 24px 10px;}
+svg{display:block;width:100%;height:auto;}
+.band-bg{fill:var(--surface);opacity:0.45;}
+.band-top{stroke:var(--border);stroke-width:1;}
+.stage-num{fill:var(--muted);font-size:11px;letter-spacing:0.2em;font-weight:600;}
+.stage-name{fill:var(--text);font-size:12px;letter-spacing:0.2em;font-weight:600;text-transform:uppercase;}
+.stage-tag{fill:var(--muted);font-size:11px;letter-spacing:0.04em;}
+.kpi-label{fill:var(--muted);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;text-anchor:end;}
+.kpi-val{fill:var(--accent);font-size:24px;font-weight:500;text-anchor:end;letter-spacing:0.02em;}
+.kpi-unit{fill:var(--muted);font-size:12px;}
+.node rect{stroke-width:1;}
+.node-fwd rect{fill:var(--surface);stroke:var(--border);}
+.node-final rect{fill:rgba(111,168,111,.10);stroke:var(--green);stroke-width:1.4;}
+.node-leak rect{fill:rgba(184,92,92,.10);stroke:rgba(184,92,92,.55);}
+.n-title{fill:var(--text);font-size:15px;font-weight:500;}
+.node-final .n-title{fill:var(--green);}
+.n-sub{fill:var(--muted);font-size:11.5px;}
+.leak-tag{fill:var(--red);font-size:9px;font-weight:700;letter-spacing:0.18em;}
+.leak-name{fill:var(--text);font-size:13px;font-weight:500;}
+.leak-drop{fill:var(--red);font-size:15px;font-weight:600;}
+.leak-rec{fill:var(--green);font-size:11.5px;letter-spacing:0.02em;}
+.conn{fill:none;}
+.conn.fwd{stroke:var(--muted);stroke-width:1.4;}
+.conn.leak{stroke:var(--red);stroke-width:1.2;stroke-dasharray:4 4;opacity:.7;}
+.conn.recovery{stroke:var(--green);stroke-width:1.3;stroke-dasharray:3 4;opacity:.8;}
+.foot{max-width:1480px;margin:0 auto;padding:14px 52px 70px;}
+.kpi-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:18px 0 22px;}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px 24px;}
+.kpi-card .c-lbl{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.kpi-card .c-val{font-size:30px;color:var(--accent);font-weight:500;letter-spacing:-0.01em;}
+.kpi-card .c-val.sm{font-size:20px;color:var(--text);}
+.callout{border-left:2px solid var(--terra);padding:8px 18px;color:var(--muted);font-size:13px;max-width:860px;margin-bottom:30px;line-height:1.6;}
+.callout b{color:var(--terra);}
+.sec-h{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin:8px 0 16px;}
+.ladder{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 36px;max-width:1100px;}
+.lad-grp{border-left:2px solid var(--border);padding:2px 0 2px 16px;}
+.lad-grp.t1{border-left-color:var(--terra);}
+.lad-grp.t2{border-left-color:var(--amber);}
+.lad-grp.t3{border-left-color:var(--accent);}
+.lad-grp.t4{border-left-color:var(--muted);}
+.lad-h{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;}
+.lad-grp.t1 .lad-h{color:var(--terra);} .lad-grp.t2 .lad-h{color:var(--amber);}
+.lad-grp.t3 .lad-h{color:var(--accent);}
+.lad-row{display:grid;grid-template-columns:24px 1fr auto;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.lad-n{font-size:12px;color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums;}
+.lad-t{font-size:13px;color:var(--text);}
+.lad-m{font-size:11px;color:var(--muted);text-align:right;}
+.footline{font-size:11px;color:var(--muted);letter-spacing:0.06em;border-top:1px solid var(--border);padding-top:18px;margin-top:30px;}
+.legend{display:flex;gap:24px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:6px;}
+.legend span{display:inline-flex;align-items:center;gap:8px;}
+.legend i{width:18px;height:0;border-top:2px solid;display:inline-block;}
+</style></head><body>
+<header class="pagehead">
+  <div>
+    <div class="brand">UGC WORLD</div>
+    <p class="subtitle">DM Setter funnel · volume + recovery + priority · v1</p>
+    <p class="caption">Where leads enter via SMS, email and the Typeform bonus opt-ins, where each week's volume bleeds, and the exact recovery line for every leak. Numbers are realistic weekly flow, anchored to measured bonus opt-ins (~450/wk) and the real ~6.5% lead→book rate.</p>
+  </div>
+  <div class="headdate">Realistic forecast<br>weekly flow</div>
+</header>
+
+<div class="frame"><svg id="diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1250" width="100%"><rect class="band-bg" x="0" y="30" width="1400" height="150"/><line class="band-top" x1="0" y1="30" x2="1400" y2="30"/><text class="stage-num" x="44" y="64">01</text><text class="stage-name" x="86" y="64">Leads in</text><text class="stage-tag" x="44" y="86">opt-in · said yes · bonus form</text><text class="kpi-label" x="1356" y="64">leads / week</text><text class="kpi-val" x="1356" y="96">≈450<tspan class="kpi-unit"> /wk</tspan></text><rect class="band-bg" x="0" y="180" width="1400" height="150"/><line class="band-top" x1="0" y1="180" x2="1400" y2="180"/><text class="stage-num" x="44" y="214">02</text><text class="stage-name" x="86" y="214">First contact</text><text class="stage-tag" x="44" y="236">speed to lead, under 5 min</text><text class="kpi-label" x="1356" y="214">reached</text><text class="kpi-val" x="1356" y="246">≈160<tspan class="kpi-unit"> /wk</tspan></text><rect class="band-bg" x="0" y="330" width="1400" height="150"/><line class="band-top" x1="0" y1="330" x2="1400" y2="330"/><text class="stage-num" x="44" y="364">03</text><text class="stage-name" x="86" y="364">Confirm spot</text><text class="stage-tag" x="44" y="386">get the micro-yes</text><text class="kpi-label" x="1356" y="364">committed</text><text class="kpi-val" x="1356" y="396">≈115<tspan class="kpi-unit"> /wk</tspan></text><rect class="band-bg" x="0" y="480" width="1400" height="150"/><line class="band-top" x1="0" y1="480" x2="1400" y2="480"/><text class="stage-num" x="44" y="514">04</text><text class="stage-name" x="86" y="514">Show live</text><text class="stage-tag" x="44" y="536">the free masterclass</text><text class="kpi-label" x="1356" y="514">attended</text><text class="kpi-val" x="1356" y="546">≈92<tspan class="kpi-unit"> /wk</tspan></text><rect class="band-bg" x="0" y="630" width="1400" height="150"/><line class="band-top" x1="0" y1="630" x2="1400" y2="630"/><text class="stage-num" x="44" y="664">05</text><text class="stage-name" x="86" y="664">Post-class</text><text class="stage-tag" x="44" y="686">the warm window</text><text class="kpi-label" x="1356" y="664">still warm</text><text class="kpi-val" x="1356" y="696">≈70<tspan class="kpi-unit"> /wk</tspan></text><rect class="band-bg" x="0" y="780" width="1400" height="150"/><line class="band-top" x1="0" y1="780" x2="1400" y2="780"/><text class="stage-num" x="44" y="814">06</text><text class="stage-name" x="86" y="814">Book triage call</text><text class="stage-tag" x="44" y="836">with an advisor</text><text class="kpi-label" x="1356" y="814">booked / wk</text><text class="kpi-val" x="1356" y="846">≈30<tspan class="kpi-unit"> /wk</tspan></text><rect class="band-bg" x="0" y="930" width="1400" height="150"/><line class="band-top" x1="0" y1="930" x2="1400" y2="930"/><text class="stage-num" x="44" y="964">07</text><text class="stage-name" x="86" y="964">Show to call</text><text class="stage-tag" x="44" y="986">the last gate</text><text class="kpi-label" x="1356" y="964">showed</text><text class="kpi-val" x="1356" y="996">≈17<tspan class="kpi-unit"> /wk</tspan></text><rect class="band-bg" x="0" y="1080" width="1400" height="150"/><line class="band-top" x1="0" y1="1080" x2="1400" y2="1080"/><text class="stage-num" x="44" y="1114">→</text><text class="stage-name" x="86" y="1114">Triage → close</text><text class="stage-tag" x="44" y="1136">Shibat / Christina · ~25% close</text><text class="kpi-label" x="1356" y="1114">closes / wk</text><text class="kpi-val" x="1356" y="1146">≈4<tspan class="kpi-unit"> /wk</tspan></text><path class="conn fwd" d="M470,138 L470,222" marker-end="url(#fwd)"/><path class="conn fwd" d="M470,288 L470,372" marker-end="url(#fwd)"/><path class="conn fwd" d="M470,438 L470,522" marker-end="url(#fwd)"/><path class="conn fwd" d="M470,588 L470,672" marker-end="url(#fwd)"/><path class="conn fwd" d="M470,738 L470,822" marker-end="url(#fwd)"/><path class="conn fwd" d="M470,888 L470,972" marker-end="url(#fwd)"/><path class="conn fwd" d="M470,1038 L470,1122" marker-end="url(#fwd)"/><g class="node node-fwd"><rect x="345" y="72" width="250" height="66" rx="7"/><text class="n-title" x="470" y="100" text-anchor="middle">Leads in</text><text class="n-sub" x="470" y="120" text-anchor="middle">opt-in · said yes · bonus form</text></g><g class="node node-fwd"><rect x="345" y="222" width="250" height="66" rx="7"/><text class="n-title" x="470" y="250" text-anchor="middle">First contact</text><text class="n-sub" x="470" y="270" text-anchor="middle">speed to lead, under 5 min</text></g><g class="node node-fwd"><rect x="345" y="372" width="250" height="66" rx="7"/><text class="n-title" x="470" y="400" text-anchor="middle">Confirm spot</text><text class="n-sub" x="470" y="420" text-anchor="middle">get the micro-yes</text></g><g class="node node-fwd"><rect x="345" y="522" width="250" height="66" rx="7"/><text class="n-title" x="470" y="550" text-anchor="middle">Show live</text><text class="n-sub" x="470" y="570" text-anchor="middle">the free masterclass</text></g><g class="node node-fwd"><rect x="345" y="672" width="250" height="66" rx="7"/><text class="n-title" x="470" y="700" text-anchor="middle">Post-class</text><text class="n-sub" x="470" y="720" text-anchor="middle">the warm window</text></g><g class="node node-fwd"><rect x="345" y="822" width="250" height="66" rx="7"/><text class="n-title" x="470" y="850" text-anchor="middle">Book triage call</text><text class="n-sub" x="470" y="870" text-anchor="middle">with an advisor</text></g><g class="node node-fwd"><rect x="345" y="972" width="250" height="66" rx="7"/><text class="n-title" x="470" y="1000" text-anchor="middle">Show to call</text><text class="n-sub" x="470" y="1020" text-anchor="middle">the last gate</text></g><g class="node node-final"><rect x="345" y="1122" width="250" height="66" rx="7"/><text class="n-title" x="470" y="1150" text-anchor="middle">Triage → close</text><text class="n-sub" x="470" y="1170" text-anchor="middle">Shibat / Christina · ~25% close</text></g><path class="conn leak" d="M595,105 L764,105" marker-end="url(#leak)"/><g class="node node-leak"><rect x="770" y="78" width="320" height="54" rx="7"/><text class="leak-tag" x="788" y="100">LEAK</text><text class="leak-name" x="840" y="100">never replies</text><text class="leak-drop" x="1074" y="102" text-anchor="end">−290/wk</text><text class="leak-rec" x="788" y="122">↻ pounce in 5 min · reply YES</text></g><path class="conn recovery" d="M810,132 C 810,182 685,255 601,255" marker-end="url(#rec)"/><path class="conn leak" d="M595,255 L764,255" marker-end="url(#leak)"/><g class="node node-leak"><rect x="770" y="228" width="320" height="54" rx="7"/><text class="leak-tag" x="788" y="250">LEAK</text><text class="leak-name" x="840" y="250">goes cold</text><text class="leak-drop" x="1074" y="252" text-anchor="end">−45/wk</text><text class="leak-rec" x="788" y="272">↻ value drop + light bump</text></g><path class="conn recovery" d="M810,282 C 810,332 685,405 601,405" marker-end="url(#rec)"/><path class="conn leak" d="M595,405 L764,405" marker-end="url(#leak)"/><g class="node node-leak"><rect x="770" y="378" width="320" height="54" rx="7"/><text class="leak-tag" x="788" y="400">LEAK</text><text class="leak-name" x="840" y="400">no-show to class</text><text class="leak-drop" x="1074" y="402" text-anchor="end">−23/wk</text><text class="leak-rec" x="788" y="422">↻ day-of FOMO · replay + rebook</text></g><path class="conn recovery" d="M810,432 C 810,482 685,555 601,555" marker-end="url(#rec)"/><path class="conn leak" d="M595,555 L764,555" marker-end="url(#leak)"/><g class="node node-leak"><rect x="770" y="528" width="320" height="54" rx="7"/><text class="leak-tag" x="788" y="550">LEAK</text><text class="leak-name" x="840" y="550">watched, didn't book</text><text class="leak-drop" x="1074" y="552" text-anchor="end">−22/wk</text><text class="leak-rec" x="788" y="572">↻ same-day check-in + book</text></g><path class="conn recovery" d="M810,582 C 810,632 685,705 601,705" marker-end="url(#rec)"/><path class="conn leak" d="M595,705 L764,705" marker-end="url(#leak)"/><g class="node node-leak"><rect x="770" y="678" width="320" height="54" rx="7"/><text class="leak-tag" x="788" y="700">LEAK</text><text class="leak-name" x="840" y="700">didn't book / unconfirmed</text><text class="leak-drop" x="1074" y="702" text-anchor="end">−40/wk</text><text class="leak-rec" x="788" y="722">↻ confirm · bump · confirm</text></g><path class="conn recovery" d="M810,732 C 810,782 685,855 601,855" marker-end="url(#rec)"/><path class="conn leak" d="M595,855 L764,855" marker-end="url(#leak)"/><g class="node node-leak"><rect x="770" y="828" width="320" height="54" rx="7"/><text class="leak-tag" x="788" y="850">LEAK</text><text class="leak-name" x="840" y="850">call no-show</text><text class="leak-drop" x="1074" y="852" text-anchor="end">−13/wk</text><text class="leak-rec" x="788" y="872">↻ T-1hr / T-15min · warm rebook</text></g><path class="conn recovery" d="M810,882 C 810,932 685,1005 601,1005" marker-end="url(#rec)"/><defs>
+<marker id="fwd" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0,0 L7,4.5 L0,9 z" fill="#8A8478"/></marker>
+<marker id="leak" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto"><path d="M0,0 L7,4.5 L0,9 z" fill="#B85C5C"/></marker>
+<marker id="rec" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto"><path d="M0,0 L7,4.5 L0,9 z" fill="#6FA86F"/></marker>
+</defs></svg>
+  <div class="legend">
+    <span><i style="border-color:var(--muted)"></i> forward flow</span>
+    <span><i style="border-color:var(--red);border-top-style:dashed"></i> leak / drop-off</span>
+    <span><i style="border-color:var(--green);border-top-style:dashed"></i> recovery line</span>
+    <span><i style="border-color:var(--accent);border-top-style:solid"></i> gold = weekly volume (KPI)</span>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="kpi-cards">
+    <div class="kpi-card"><div class="c-lbl">Leads in / week</div><div class="c-val">≈450</div></div>
+    <div class="kpi-card"><div class="c-lbl">Booked triage calls / week</div><div class="c-val">≈30</div></div>
+    <div class="kpi-card"><div class="c-lbl">Lead → book (real)</div><div class="c-val sm">~6.5%  ·  ≈4 closes/wk</div></div>
+  </div>
+  <div class="callout"><b>Capacity reality.</b> ~450 fresh leads/week is ~64/day to hit inside 5 minutes, on top of confirms, reminders and nurture. One VA tops out around 100-150 quality touches/day. The −290/wk top leak ("never replies") is mostly capacity and speed, not copy. Recovering even a third of it beats every other move on this board.</div>
+
+  <div class="sec-h">Priority ladder — what the setter works first → last</div>
+  <div class="ladder"><div class="lad-grp t1"><div class="lad-h">Tier 1 · Do now</div><div class="lad-row"><span class="lad-n">1</span><span class="lad-t">New hand-raisers — speed to lead</span><span class="lad-m">fresh yes + bonus · within 5 min</span></div><div class="lad-row"><span class="lad-n">2</span><span class="lad-t">Calls booked today — confirm + remind</span><span class="lad-m">T-1hr / T-15min</span></div><div class="lad-row"><span class="lad-n">3</span><span class="lad-t">Just watched the class — book them</span><span class="lad-m">same-day hot window</span></div></div><div class="lad-grp t2"><div class="lad-h">Tier 2 · Same day</div><div class="lad-row"><span class="lad-n">4</span><span class="lad-t">Day-of class — FOMO + go-live push</span><span class="lad-m">drive the show</span></div><div class="lad-row"><span class="lad-n">5</span><span class="lad-t">Day-before bookings — confirm-bump-confirm</span><span class="lad-m">lock the call</span></div></div><div class="lad-grp t3"><div class="lad-h">Tier 3 · Daily sweep</div><div class="lad-row"><span class="lad-n">6</span><span class="lad-t">Ghosted mid-chat — value drop + bump</span><span class="lad-m">never “u there?”</span></div><div class="lad-row"><span class="lad-n">7</span><span class="lad-t">Unconfirmed new regs — reply-bait YES</span><span class="lad-m">micro-commit</span></div></div><div class="lad-grp t4"><div class="lad-h">Tier 4 · Batch (lowest)</div><div class="lad-row"><span class="lad-n">8</span><span class="lad-t">Reactivation pool — aged opt-ins, “not now”</span><span class="lad-m">recycle on a date</span></div></div></div>
+
+  <div class="footline">UGC World · DM Setter funnel · warmest + closest to cash + fastest to go cold, worked first.</div>
+</div>
+</body></html>
